@@ -1,0 +1,103 @@
+<template>
+    <lightning-card title="Bill split" icon-name="standard:product_consumed">
+        <div class="slds-p-horizontal_medium">
+            <c-bill-split-alert variant="error" messages={errors}></c-bill-split-alert>
+
+            <template lwc:if={hasData}>
+                <!-- Summary metrics -->
+                <c-bill-split-bill-summary
+                    status={data.status}
+                    period-start={data.periodStart}
+                    period-end={data.periodEnd}
+                    total-amount={data.totalAmount}
+                    total-units={data.totalUnits}
+                    usage-charge={data.usageCharge}
+                    supply-charge={data.supplyCharge}
+                    split-method={data.splitMethod}
+                    unit-of-measure={uom}
+                ></c-bill-split-bill-summary>
+
+                <!-- Locked banner -->
+                <template lwc:if={isLocked}>
+                    <c-bill-split-alert variant="warning" messages={lockedMessages}></c-bill-split-alert>
+                </template>
+
+                <!-- Sub-meter closing reading -->
+                <template lwc:if={hasMeter}>
+                    <c-bill-split-meter-reading
+                        meter-name={data.meter.meterName}
+                        unit-name={data.meter.unitName}
+                        opening-value={data.meter.openingValue}
+                        opening-date={data.meter.openingDate}
+                        closing-value={closingValue}
+                        closing-date={closingDate}
+                        can-edit={data.canEditReading}
+                        busy={busy}
+                        needs-reading={data.needsClosingReading}
+                        onsavereading={handleSaveReading}
+                    ></c-bill-split-meter-reading>
+                </template>
+
+                <!-- Calculate / Send actions -->
+                <c-bill-split-actions
+                    can-calculate={data.canCalculate}
+                    can-send={data.canSend}
+                    has-allocations={hasAllocations}
+                    busy={busy}
+                    oncalculate={handleCalculate}
+                    onsend={handleSend}
+                ></c-bill-split-actions>
+
+                <!-- Warnings -->
+                <c-bill-split-alert variant="warning" messages={warnings}></c-bill-split-alert>
+
+                <!-- Split results or empty state -->
+                <template lwc:if={hasAllocations}>
+                    <c-bill-split-allocations
+                        allocations={data.allocations}
+                        unit-of-measure={uom}
+                        allocated-amount={data.allocatedAmount}
+                        variance={data.variance}
+                        split-method={data.splitMethod}
+                    ></c-bill-split-allocations>
+                </template>
+                <template lwc:else>
+                    <div class="empty-state" aria-live="polite">
+                        <lightning-icon icon-name="utility:graph" size="large" class="empty-icon"></lightning-icon>
+                        <p class="slds-text-heading_small slds-m-top_small">No split calculated yet</p>
+                        <p class="slds-text-color_weak slds-m-top_xx-small">
+                            Click <strong>Calculate split</strong> to see how the bill breaks down between units.
+                        </p>
+                    </div>
+                </template>
+
+                <!-- Email log -->
+                <template lwc:if={hasNotifications}>
+                    <c-bill-split-email-log
+                        notifications={data.notifications}
+                        busy={busy}
+                        onresend={handleResend}
+                    ></c-bill-split-email-log>
+                </template>
+            </template>
+
+            <!-- Error loading -->
+            <template lwc:elseif={loaded}>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:warning" size="large" class="empty-icon"></lightning-icon>
+                    <p class="slds-text-color_weak slds-m-top_small">The bill details could not be loaded.</p>
+                </div>
+            </template>
+
+            <!-- Initial load spinner -->
+            <template lwc:else>
+                <div class="loading-container">
+                    <lightning-spinner alternative-text="Loading bill data" size="medium"></lightning-spinner>
+                </div>
+            </template>
+        </div>
+
+        <!-- Screen-reader status announcements -->
+        <div class="slds-assistive-text" aria-live="polite" role="status">{statusAnnouncement}</div>
+    </lightning-card>
+</template>

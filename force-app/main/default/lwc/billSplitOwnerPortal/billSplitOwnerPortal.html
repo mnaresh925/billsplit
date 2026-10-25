@@ -1,0 +1,57 @@
+<template>
+    <div class="portal">
+        <!-- Loading overlay -->
+        <template lwc:if={loading}>
+            <div class="slds-is-relative loading-container">
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </div>
+        </template>
+        
+        <template lwc:if={hasErrors}>
+            <!-- Error banner (reusable component) -->
+            <c-bill-split-alert variant="error" messages={errors}></c-bill-split-alert>
+        </template>
+
+        <template lwc:else>
+            <!-- Home: My Properties -->
+            <template lwc:if={isHome}>
+                <h1 class="slds-text-heading_large slds-m-vertical_medium">My properties</h1>
+                <template lwc:if={showEmptyHome}>
+                    <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
+                        <p class="slds-text-body_regular slds-text-color_weak">
+                            No properties are linked to your account. If you think this is wrong, contact the property manager.
+                        </p>
+                    </div>
+                </template>
+                <template for:each={propertyCards} for:item="p">
+                    <c-bill-split-owner-portal-property-card
+                        key={p.propertyId}
+                        property={p}
+                        onviewbills={handleViewBills}>
+                    </c-bill-split-owner-portal-property-card>
+                </template>
+            </template>
+
+            <!-- Bill list for one property -->
+            <template lwc:if={isBills}>
+                <c-bill-split-owner-portal-bill-list
+                    bills={bills}
+                    selected-property={selectedProperty}
+                    onviewbill={handleViewBill}
+                    onback={handleBackToHome}>
+                </c-bill-split-owner-portal-bill-list>
+            </template>
+
+            <!-- Single bill detail -->
+            <template lwc:if={isDetail}>
+                <c-bill-split-owner-portal-bill-detail
+                    bill={detail}
+                    onback={handleBackToBills}>
+                </c-bill-split-owner-portal-bill-detail>
+            </template>
+
+            <!-- Screen-reader status announcements -->
+            <div class="slds-assistive-text" aria-live="polite" role="status">{statusAnnouncement}</div> 
+        </template>        
+    </div>
+</template>

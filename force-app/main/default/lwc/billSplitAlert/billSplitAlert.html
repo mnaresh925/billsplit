@@ -1,0 +1,17 @@
+<template>
+    <template lwc:if={hasMessages}>
+        <div class={containerClass} role="alert">
+            <span class="slds-assistive-text">{variant}</span>
+            <template lwc:if={isSingleMessage}>
+                <h2>{firstMessage}</h2>
+            </template>
+            <template lwc:else>
+                <ul>
+                    <template for:each={messages} for:item="msg">
+                        <li key={msg}>{msg}</li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+    </template>
+</template>

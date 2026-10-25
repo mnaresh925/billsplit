@@ -1,0 +1,10 @@
+BillSplitCalculatorTest
+BillSplitControllerSendTest
+BillSplitControllerTest
+BillSplitEmailBuilderTest
+BillSplitNotificationServiceTest
+BillSplitServiceTest
+BillSplitTriggerTest
+OwnerPortalControllerTest
+OwnershipSharingServiceTest
+PropertySetupControllerTest

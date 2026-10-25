@@ -1,0 +1,88 @@
+<template>
+    <article class="slds-card slds-m-bottom_medium">
+        <div class="slds-card__header slds-grid slds-grid_align-spread slds-has-flexi-truncate">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name="standard:home" size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body slds-truncate">
+                    <h2 class="slds-card__header-title slds-truncate">
+                        <span class="slds-text-heading_small">{name}</span>
+                    </h2>
+                    <template lwc:if={address}>
+                        <p class="slds-text-body_small slds-text-color_weak">{address}</p>
+                    </template>
+                </div>
+            </header>
+            <div class="slds-no-flex">
+                <lightning-button
+                    label="View bills"
+                    variant="brand"
+                    onclick={handleViewBills}></lightning-button>
+            </div>
+        </div>
+
+        <div class="slds-card__body slds-card__body_inner">
+            <!-- Units grid -->
+            <div class="slds-grid slds-wrap slds-gutters_x-small slds-m-bottom_small">
+                <template for:each={unitRows} for:item="u">
+                    <div key={u.unitId} class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-3 slds-m-bottom_x-small">
+                        <div class={u.boxClass}>
+                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                                <strong class="slds-truncate">{u.name}</strong>
+                                <template lwc:if={u.isMine}>
+                                    <lightning-badge label="Yours" class="slds-m-left_xx-small badge-mine"></lightning-badge>
+                                </template>
+                            </div>
+                            <template lwc:if={u.address}>
+                                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xxx-small">{u.address}</p>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Latest bill snapshot -->
+            <template lwc:if={hasLatest}>
+                <div class="slds-border_top slds-p-top_small">
+                    <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xxx-small">
+                        Latest bill: {latestBill.utilityType}, period ending
+                        <span class="slds-m-horizontal_xx-small">
+                            <lightning-formatted-date-time
+                                value={latestBill.periodEnd}
+                                year="numeric" month="short" day="2-digit"
+                                time-zone="UTC"></lightning-formatted-date-time>
+                        </span>
+                    </p>
+                    <p>
+                        Bill total:
+                        <span class="slds-m-horizontal_xx-small">
+                        <strong>
+                            <lightning-formatted-number
+                                value={latestBill.totalAmount}
+                                format-style="currency"
+                                currency-code="AUD"></lightning-formatted-number>
+                        </strong>
+                        </span>
+                        <template lwc:if={hasMyShare}>
+                            <span class="slds-m-left_xx-small">
+                                , your share:
+                                <span class="slds-m-horizontal_xx-small">
+                                <strong class="share-accent">
+                                    <lightning-formatted-number
+                                        value={latestBill.myShare}
+                                        format-style="currency"
+                                        currency-code="AUD"></lightning-formatted-number>
+                                </strong>
+                                </span>
+                            </span>
+                        </template>
+                    </p>
+                </div>
+            </template>
+            <template lwc:elseif={showNoBills}>
+                <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">No bills have been sent yet.</p>
+            </template>
+        </div>
+    </article>
+</template>

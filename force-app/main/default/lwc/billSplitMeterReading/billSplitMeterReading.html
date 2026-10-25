@@ -1,0 +1,53 @@
+<template>
+    <div class="slds-box slds-m-bottom_medium meter-section">
+        <h3 class="slds-text-heading_small slds-m-bottom_small">
+            Sub-meter {meterName} ({unitName})
+        </h3>
+        <div class="slds-grid slds-wrap slds-gutters_small slds-grid_vertical-align-end">
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                <p class="slds-text-title">Opening reading</p>
+                <p>
+                    <lightning-formatted-number value={openingValue}></lightning-formatted-number>
+                    <template lwc:if={openingDate}>
+                        <span class="slds-m-horizontal_xx-small">on</span>
+                        <lightning-formatted-date-time value={openingDate} year="numeric" month="short" day="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                    </template>
+                </p>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                <lightning-input
+                    class="reading-input"
+                    type="number"
+                    step="any"
+                    min="0"
+                    label="Closing reading"
+                    value={inputValue}
+                    required
+                    disabled={inputsDisabled}
+                    onchange={handleValueChange}
+                ></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                <lightning-input
+                    class="reading-input"
+                    type="date"
+                    label="Reading date"
+                    value={inputDate}
+                    required
+                    disabled={inputsDisabled}
+                    onchange={handleDateChange}
+                ></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                <lightning-button
+                    label="Save reading"
+                    disabled={saveDisabled}
+                    onclick={handleSave}
+                ></lightning-button>
+            </div>
+        </div>
+        <template lwc:if={showHelp}>
+            <p class="slds-text-color_weak slds-m-top_x-small">{helpMessage}</p>
+        </template>
+    </div>
+</template>

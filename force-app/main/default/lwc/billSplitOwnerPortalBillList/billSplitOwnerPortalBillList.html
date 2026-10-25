@@ -1,0 +1,102 @@
+<template>
+    <div class="slds-m-bottom_medium">
+        <!-- Back navigation -->
+        <lightning-button
+            variant="base"
+            label="Back to my properties"
+            icon-name="utility:chevronleft"
+            onclick={handleBack}
+            class="slds-m-bottom_x-small"></lightning-button>
+
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+            {propertyName}: bills
+        </h2>
+
+        <template lwc:if={hasBills}>
+            <div class="slds-scrollable_x">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table_fixed-layout">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" class="slds-cell-wrap">
+                                <div class="slds-truncate" title="Bill">Bill</div>
+                            </th>
+                            <th scope="col" class="slds-cell-wrap">
+                                <div class="slds-truncate" title="Period">Period</div>
+                            </th>
+                            <th scope="col" class="slds-cell-wrap">
+                                <div class="slds-truncate" title="Due">Due</div>
+                            </th>
+                            <th scope="col" class="slds-text-align_right">
+                                <div class="slds-truncate" title="Total">Total</div>
+                            </th>
+                            <th scope="col" class="slds-text-align_right">
+                                <div class="slds-truncate" title="Your share">Your share</div>
+                            </th>
+                            <th scope="col" style="width: 5rem;">
+                                <span class="slds-assistive-text">Actions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={billRows} for:item="b">
+                            <tr key={b.billId}>
+                                <th scope="row" data-label="Bill">
+                                    <div class="slds-truncate">{b.utilityType} {b.billNumber}</div>
+                                </th>
+                                <td data-label="Period">
+                                    <lightning-formatted-date-time
+                                        value={b.periodStart}
+                                        year="numeric" month="short" day="2-digit"
+                                        time-zone="UTC"></lightning-formatted-date-time>
+                                    <span class="slds-m-horizontal_xx-small">to</span>
+                                    <lightning-formatted-date-time
+                                        value={b.periodEnd}
+                                        year="numeric" month="short" day="2-digit"
+                                        time-zone="UTC"></lightning-formatted-date-time>
+                                </td>
+                                <td data-label="Due">
+                                    <template lwc:if={b.dueDate}>
+                                        <lightning-formatted-date-time
+                                            value={b.dueDate}
+                                            year="numeric" month="short" day="2-digit"
+                                            time-zone="UTC"></lightning-formatted-date-time>
+                                    </template>
+                                </td>
+                                <td data-label="Total" class="slds-text-align_right">
+                                    <lightning-formatted-number
+                                        value={b.totalAmount}
+                                        format-style="currency"
+                                        currency-code="AUD"></lightning-formatted-number>
+                                </td>
+                                <td data-label="Your share" class="slds-text-align_right">
+                                    <template lwc:if={b.hasMyShare}>
+                                        <strong>
+                                            <lightning-formatted-number
+                                                value={b.myShare}
+                                                format-style="currency"
+                                                currency-code="AUD"></lightning-formatted-number>
+                                        </strong>
+                                    </template>
+                                </td>
+                                <td>
+                                    <lightning-button
+                                        variant="base"
+                                        label="Details"
+                                        data-id={b.billId}
+                                        onclick={handleViewBill}></lightning-button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+        <template lwc:else>
+            <div class="slds-illustration slds-illustration_small slds-p-around_medium slds-text-align_center">
+                <p class="slds-text-body_regular slds-text-color_weak">
+                    No bills have been sent for this property yet.
+                </p>
+            </div>
+        </template>
+    </div>
+</template>

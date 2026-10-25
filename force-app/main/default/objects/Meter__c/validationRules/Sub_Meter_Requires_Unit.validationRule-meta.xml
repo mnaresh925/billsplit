@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sub_Meter_Requires_Unit</fullName>
+    <active>true</active>
+    <description>A sub-meter must serve a unit.</description>
+    <errorConditionFormula>AND(ISPICKVAL(Meter_Role__c, &quot;Sub&quot;), ISBLANK(Unit__c))</errorConditionFormula>
+    <errorDisplayField>Unit__c</errorDisplayField>
+    <errorMessage>Select the unit this sub-meter serves.</errorMessage>
+</ValidationRule>

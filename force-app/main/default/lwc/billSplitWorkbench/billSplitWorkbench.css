@@ -1,0 +1,19 @@
+/* Loading state — centred spinner with min-height for skeleton feel */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 12rem;
+}
+
+/* Empty state — centred illustration placeholder */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.empty-icon {
+    --slds-c-icon-color-foreground-default: var(--lwc-colorTextIconDefault, #b0adab);
+}

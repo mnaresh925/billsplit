@@ -1,0 +1,8 @@
+.totals-row {
+    background-color: var(--lwc-colorBackgroundAlt, #f3f3f3);
+}
+
+.totals-row th,
+.totals-row td {
+    border-top: 2px solid var(--lwc-colorBorder, #e5e5e5);
+}

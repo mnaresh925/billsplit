@@ -1,0 +1,41 @@
+<template>
+    <lightning-card title={displayTitle} icon-name={computedIconName}>
+        <div class="slds-p-around_medium">
+            <div
+                class="nav-tile"
+                onclick={handleTileClick}
+                onkeydown={handleKeyDown}
+                role="button"
+                tabindex="0"
+                aria-label={labelName}
+            >
+                <div class="tile-main">
+                    <div class="tile-icon-wrapper">
+                        <lightning-icon
+                            icon-name={computedIconName}
+                            size="medium"
+                            alternative-text={labelName}
+                        ></lightning-icon>
+                    </div>
+                    <div class="tile-info">
+                        <div class="tile-headline">
+                            <span class="tile-title">{labelName}</span>
+                            <span class="slds-badge slds-theme_success badge-pill">{displayBadge}</span>
+                        </div>
+                        <p class="tile-desc">{displayDescription}</p>
+                    </div>
+                </div>
+
+                <div class="tile-cta">
+                    <lightning-button
+                        label={labelName}
+                        variant="brand"
+                        icon-name="utility:forward"
+                        icon-position="right"
+                        onclick={handleButtonClick}
+                    ></lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

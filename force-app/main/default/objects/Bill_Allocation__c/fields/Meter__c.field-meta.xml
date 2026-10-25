@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Meter__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <label>Meter</label>
+    <referenceTo>Meter__c</referenceTo>
+    <relationshipLabel>Bill Allocations</relationshipLabel>
+    <relationshipName>Bill_Allocations</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

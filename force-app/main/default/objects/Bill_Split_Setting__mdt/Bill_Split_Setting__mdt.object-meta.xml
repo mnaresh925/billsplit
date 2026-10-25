@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Configuration for the Bill Split app.</description>
+    <label>Bill Split Setting</label>
+    <pluralLabel>Bill Split Settings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

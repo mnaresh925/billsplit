@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <content>Home_Page_Default1</content>
+        <formFactor>Large</formFactor>
+        <skipRecordTypeSelect>false</skipRecordTypeSelect>
+        <type>Flexipage</type>
+        <pageOrSobjectType>standard-home</pageOrSobjectType>
+    </actionOverrides>
+    <description>Split council utility bills between the units of a dual occupancy property.</description>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <isOmniPinnedViewEnabled>false</isOmniPinnedViewEnabled>
+    <label>Bill Split</label>
+    <navType>Standard</navType>
+    <tabs>standard-home</tabs>
+    <tabs>Property__c</tabs>
+    <tabs>Property_Setup</tabs>
+    <tabs>Utility_Bill__c</tabs>
+    <tabs>Meter_Reading__c</tabs>
+    <tabs>standard-Contact</tabs>
+    <tabs>standard-Account</tabs>
+    <tabs>Unit__c</tabs>
+    <tabs>Ownership__c</tabs>
+    <tabs>Utility_Account__c</tabs>
+    <tabs>Meter__c</tabs>
+    <tabs>Bill_Allocation__c</tabs>
+    <tabs>Bill_Notification__c</tabs>
+    <uiType>Lightning</uiType>
+</CustomApplication>

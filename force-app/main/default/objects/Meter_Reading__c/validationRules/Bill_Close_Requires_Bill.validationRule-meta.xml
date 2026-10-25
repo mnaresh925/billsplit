@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bill_Close_Requires_Bill</fullName>
+    <active>true</active>
+    <description>A Bill Close reading must be linked to its bill.</description>
+    <errorConditionFormula>AND(ISPICKVAL(Reading_Type__c, &quot;Bill Close&quot;), ISBLANK(Utility_Bill__c))</errorConditionFormula>
+    <errorDisplayField>Utility_Bill__c</errorDisplayField>
+    <errorMessage>Select the Utility Bill this reading closes.</errorMessage>
+</ValidationRule>

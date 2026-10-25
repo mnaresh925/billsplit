@@ -1,0 +1,31 @@
+<template>
+    <div class="summary-card slds-box slds-box_x-small slds-m-bottom_medium">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-start">
+            <div class="slds-media slds-media_small">
+                <div class="slds-media__figure">
+                    <lightning-icon icon-name={iconName} size="small"></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                        <p class="slds-text-title_bold slds-m-right_x-small">{title}</p>
+                        <lightning-icon
+                            icon-name="utility:success"
+                            size="xx-small"
+                            variant="success"
+                            alternative-text="Section complete"
+                        ></lightning-icon>
+                    </div>
+                    <slot></slot>
+                </div>
+            </div>
+            <template lwc:if={showEditButton}>
+                <lightning-button-icon
+                    icon-name="utility:edit"
+                    alternative-text={editAriaLabel}
+                    variant="bare"
+                    onclick={handleEdit}
+                ></lightning-button-icon>
+            </template>
+        </div>
+    </div>
+</template>

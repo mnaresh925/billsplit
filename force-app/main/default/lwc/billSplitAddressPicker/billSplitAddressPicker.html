@@ -1,0 +1,109 @@
+<template>
+    <div class="slds-form-element">
+        <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_x-small">
+            <span class="slds-form-element__label slds-text-title_bold">{label}</span>
+            <lightning-input
+                type="toggle"
+                label="Enter address manually"
+                checked={manual}
+                message-toggle-active="Manual"
+                message-toggle-inactive="Map"
+                onchange={handleManualToggle}
+            ></lightning-input>
+        </div>
+
+        <div class={searchRowClass}>
+            <div class="slds-grid slds-grid_vertical-align-end">
+                <lightning-input
+                    class="slds-col slds-grow"
+                    type="search"
+                    variant="label-hidden"
+                    label="Search for an address"
+                    placeholder="Search for an address, then press Enter"
+                    value={query}
+                    onchange={handleQueryChange}
+                    onkeyup={handleQueryKey}
+                ></lightning-input>
+                <lightning-button
+                    class="slds-m-left_x-small"
+                    label="Search"
+                    variant="neutral"
+                    disabled={busy}
+                    onclick={handleSearch}
+                ></lightning-button>
+            </div>
+            <template lwc:if={busy}>
+                <div class="slds-m-top_x-small slds-text-color_weak">Looking up the address...</div>
+            </template>
+            <template lwc:if={hasResults}>
+                <ul class="slds-has-dividers_bottom-space slds-m-top_x-small results" role="listbox">
+                    <template for:each={results} for:item="r">
+                        <li key={r.key} class="slds-item" role="option">
+                            <a href="#" data-index={r.index} onclick={handleResultClick}>{r.text}</a>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
+                Click the map or drag the pin to pick a spot. Map data from OpenStreetMap contributors.
+            </p>
+        </div>
+
+        <div class={mapClass} lwc:dom="manual"></div>
+
+        <template lwc:if={hasNotice}>
+            <div class="slds-notify slds-notify_alert slds-alert_warning slds-m-vertical_small" role="alert">
+                <span class="slds-assistive-text">Warning</span>
+                <h2>{notice}</h2>
+            </div>
+        </template>
+
+        <div class="slds-grid slds-wrap slds-gutters_small slds-m-top_small">
+            <div class="slds-col slds-size_1-of-1">
+                <lightning-input
+                    class="addr-field"
+                    label="Street"
+                    data-field="street"
+                    value={street}
+                    required
+                    onchange={handleFieldChange}
+                ></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                <lightning-input
+                    class="addr-field"
+                    label="Suburb"
+                    data-field="suburb"
+                    value={suburb}
+                    required
+                    onchange={handleFieldChange}
+                ></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                <lightning-combobox
+                    class="addr-field"
+                    label="State"
+                    data-field="state"
+                    value={state}
+                    options={stateOptions}
+                    required
+                    onchange={handleFieldChange}
+                ></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4">
+                <lightning-input
+                    class="addr-field"
+                    label="Postcode"
+                    data-field="postcode"
+                    value={postcode}
+                    pattern="[0-9]{4}"
+                    message-when-pattern-mismatch="Enter a 4 digit postcode"
+                    max-length="4"
+                    required
+                    onchange={handleFieldChange}
+                ></lightning-input>
+            </div>
+        </div>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">{sourceText}</p>
+    </div>
+</template>

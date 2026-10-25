@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Property_Owner</fullName>
+    <active>true</active>
+    <description>Owner household or entity for a property.</description>
+    <label>Property Owner</label>
+    <picklistValues>
+        <picklist>Owner_Type__c</picklist>
+        <values>
+            <fullName>Individual</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Joint</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Trust</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Company</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

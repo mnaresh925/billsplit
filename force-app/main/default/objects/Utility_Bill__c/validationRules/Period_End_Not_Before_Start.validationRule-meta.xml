@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Period_End_Not_Before_Start</fullName>
+    <active>true</active>
+    <description>Period end cannot be earlier than period start.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(Period_Start__c)), NOT(ISBLANK(Period_End__c)), Period_End__c &lt; Period_Start__c)</errorConditionFormula>
+    <errorDisplayField>Period_End__c</errorDisplayField>
+    <errorMessage>Period End cannot be before Period Start.</errorMessage>
+</ValidationRule>

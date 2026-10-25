@@ -1,0 +1,44 @@
+<template>
+    <div class="summary-grid slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 metric">
+            <p class="slds-text-title metric-label">Status</p>
+            <span class={statusClass}>{status}</span>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 metric">
+            <p class="slds-text-title metric-label">Period</p>
+            <p>
+                <lightning-formatted-date-time value={periodStart} year="numeric" month="short" day="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                <span class="slds-m-horizontal_xx-small">to</span>
+                <lightning-formatted-date-time value={periodEnd} year="numeric" month="short" day="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+            </p>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 metric">
+            <p class="slds-text-title metric-label">Bill total</p>
+            <p class="slds-text-heading_small">
+                <lightning-formatted-number value={totalAmount} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+            </p>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 metric">
+            <p class="slds-text-title metric-label">Council usage</p>
+            <p>
+                <lightning-formatted-number value={totalUnits}></lightning-formatted-number> {unitOfMeasure}
+            </p>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-top_small metric">
+            <p class="slds-text-title metric-label">Usage charge</p>
+            <p>
+                <lightning-formatted-number value={usageCharge} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+            </p>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-top_small metric">
+            <p class="slds-text-title metric-label">Supply charge</p>
+            <p>
+                <lightning-formatted-number value={supplyCharge} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+            </p>
+        </div>
+        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-top_small metric">
+            <p class="slds-text-title metric-label">Split method</p>
+            <p>{splitMethod}</p>
+        </div>
+    </div>
+</template>

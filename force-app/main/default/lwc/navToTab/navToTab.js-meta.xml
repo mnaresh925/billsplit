@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Navigation Quick Tile</masterLabel>
+    <description>Hero quick navigation tile for Home and App pages</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage,lightning__HomePage">
+            <property
+                name="tabApiName"
+                type="String"
+                label="Tab API Name"
+                description="The API name of the tab to navigate to (e.g. Property__c)."
+                required="true"
+            />
+            <property
+                name="labelName"
+                type="String"
+                label="Button &amp; Tile Label"
+                description="The display name of the target tab or action (e.g. Properties)."
+                required="true"
+            />
+            <property
+                name="cardTitle"
+                type="String"
+                label="Card Header Title"
+                description="Optional header title for the card (e.g. Quick Navigation)."
+            />
+            <property
+                name="description"
+                type="String"
+                label="Description Subtitle"
+                description="Help text or description displayed inside the tile."
+            />
+            <property
+                name="iconName"
+                type="String"
+                label="SLDS Icon Name"
+                description="SLDS icon name, e.g. custom:custom62 or standard:home (defaults to custom:custom62)."
+                default="custom:custom62"
+            />
+            <property
+                name="badgeText"
+                type="String"
+                label="Badge Label"
+                description="Optional badge text displayed next to the title (e.g. Quick Link)."
+                default="Quick Link"
+            />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Staff: manage properties, readings and bills, and send splits.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Bill Split Staff Group</label>
+    <permissionSets>Bill_Split_Staff</permissionSets>
+    <permissionSets>Bill_Split_UI_Access</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

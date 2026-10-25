@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <externalId>false</externalId>
+    <fullName>Alternate_Billing_Email__c</fullName>
+    <inlineHelpText>Optional second address for bill splits. Used when the ownership preference is Alternate or Both.</inlineHelpText>
+    <label>Alternate Billing Email</label>
+    <type>Email</type>
+    <unique>false</unique>
+</CustomField>

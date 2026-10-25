@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Unit_Address_Required_Unless_Same</fullName>
+    <active>true</active>
+    <description>Street, suburb, state and postcode are needed unless the unit shares the property address.</description>
+    <errorConditionFormula>AND(NOT(Same_As_Property_Address__c), OR(ISBLANK(Street__c), ISBLANK(Suburb__c), ISBLANK(Postcode__c), ISBLANK(TEXT(State__c))))</errorConditionFormula>
+    <errorMessage>Enter the unit address, or tick Same As Property Address.</errorMessage>
+</ValidationRule>

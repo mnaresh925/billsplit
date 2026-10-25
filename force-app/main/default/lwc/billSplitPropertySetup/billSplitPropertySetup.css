@@ -1,0 +1,65 @@
+/* ------------------------------------------------------------------ *
+ *  billSplitPropertySetup – component-scoped styles                   *
+ *  Uses SLDS design tokens where possible for theme consistency.      *
+ * ------------------------------------------------------------------ */
+
+/* ---- Sticky footer ------------------------------------------------ */
+.footer-bar {
+    position: sticky;
+    bottom: 0;
+    background: var(--slds-g-color-neutral-base-100, #fff);
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+    padding: var(--lwc-spacingMedium, 0.75rem) 0;
+    z-index: 1;
+    border-top: 1px solid var(--slds-g-color-border-base-1, #e5e5e5);
+}
+
+/* ---- Unit card colour accents ------------------------------------- */
+.unit-card-a {
+    border-left: 4px solid var(--slds-g-color-brand-base-50, #0176d3);
+}
+
+.unit-card-b {
+    border-left: 4px solid #7f56d9;
+}
+
+/* ---- Owner identity banner ---------------------------------------- */
+.owner-identity {
+    background: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+}
+
+/* ---- Owner card fieldset reset ------------------------------------ */
+.owner-card {
+    min-width: 0; /* prevent fieldset from overflowing grid */
+}
+
+/* ---- Ghost "add" card --------------------------------------------- */
+.ghost-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--slds-g-color-border-base-2, #c9c9c9);
+    border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    padding: var(--lwc-spacingMedium, 0.75rem);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    background: transparent;
+}
+
+.ghost-card:hover,
+.ghost-card:focus {
+    border-color: var(--slds-g-color-brand-base-50, #0176d3);
+    background: var(--slds-g-color-brand-base-95, #eef4ff);
+    outline: none;
+}
+
+/* ---- Sub-meter shaded section ------------------------------------- */
+.meter-section {
+    border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+}
+
+/* ---- Utility: step content spacing -------------------------------- */
+.step-content {
+    min-height: 240px;
+}

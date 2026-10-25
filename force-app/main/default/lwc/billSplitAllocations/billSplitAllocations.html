@@ -1,0 +1,61 @@
+<template>
+    <div class="allocations-section">
+        <h3 class="slds-text-heading_small slds-m-bottom_small">Split between units</h3>
+        <div class="slds-scrollable_x">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">Unit</th>
+                        <th scope="col" class="slds-text-align_right">Used ({unitOfMeasure})</th>
+                        <th scope="col" class="slds-text-align_right">Share of usage</th>
+                        <th scope="col" class="slds-text-align_right">Usage charge</th>
+                        <th scope="col" class="slds-text-align_right">Supply charge</th>
+                        <th scope="col" class="slds-text-align_right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={rows} for:item="r">
+                        <tr key={r.unitId}>
+                            <th scope="row">
+                                {r.unitName}
+                                <template lwc:if={r.hasTag}>
+                                    <span class={r.tagClass}>{r.tag}</span>
+                                </template>
+                            </th>
+                            <td class="slds-text-align_right">
+                                <lightning-formatted-number value={r.unitsConsumed} maximum-fraction-digits="3"></lightning-formatted-number>
+                            </td>
+                            <td class="slds-text-align_right">
+                                <lightning-formatted-number value={r.sharePercent} maximum-fraction-digits="1"></lightning-formatted-number>%
+                            </td>
+                            <td class="slds-text-align_right">
+                                <lightning-formatted-number value={r.usageAmount} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+                            </td>
+                            <td class="slds-text-align_right">
+                                <lightning-formatted-number value={r.supplyAmount} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+                            </td>
+                            <td class="slds-text-align_right slds-text-title_bold">
+                                <lightning-formatted-number value={r.totalAmount} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+                            </td>
+                        </tr>
+                    </template>
+                    <tr class="totals-row">
+                        <th scope="row" colspan="5" class="slds-text-align_right">Allocated</th>
+                        <td class="slds-text-align_right slds-text-title_bold">
+                            <lightning-formatted-number value={allocatedAmount} format-style="currency" currency-code="AUD"></lightning-formatted-number>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p class={varianceClass}>
+            <template lwc:if={varianceOk}>The shares add up to the bill total.</template>
+            <template lwc:else>
+                The shares are <lightning-formatted-number value={variance} format-style="currency" currency-code="AUD"></lightning-formatted-number> away from the bill total. Do not send until this is zero.
+            </template>
+        </p>
+        <template lwc:if={hasNotes}>
+            <p class="slds-text-color_weak slds-m-top_x-small">{notes}</p>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Amount_Not_Negative</fullName>
+    <active>true</active>
+    <description>Bill total amount is zero or more.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(Total_Amount__c)), Total_Amount__c &lt; 0)</errorConditionFormula>
+    <errorDisplayField>Total_Amount__c</errorDisplayField>
+    <errorMessage>Total Amount cannot be negative.</errorMessage>
+</ValidationRule>

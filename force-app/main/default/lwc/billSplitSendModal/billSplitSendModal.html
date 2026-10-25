@@ -1,0 +1,44 @@
+<template>
+    <lightning-modal-header label="Send the split to owners"></lightning-modal-header>
+    <lightning-modal-body>
+        <template lwc:if={loading}>
+            <div class="slds-is-relative loading-container">
+                <lightning-spinner alternative-text="Checking recipients" size="small"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:if={sendError}>
+            <c-bill-split-alert variant="error" messages={sendErrorMessages}></c-bill-split-alert>
+        </template>
+        <template lwc:if={hasBlockers}>
+            <c-bill-split-alert variant="error" messages={preview.blockers}></c-bill-split-alert>
+        </template>
+        <template lwc:if={preview}>
+            <p class="slds-m-bottom_small">
+                From <strong>{preview.senderName}</strong><br />
+                Subject: {preview.subject}
+            </p>
+            <template lwc:if={hasWarnings}>
+                <c-bill-split-alert variant="warning" messages={preview.warnings}></c-bill-split-alert>
+            </template>
+            <p class="slds-text-title_bold slds-m-bottom_x-small">{recipientSummary}</p>
+            <ul class="slds-list_dotted">
+                <template for:each={preview.recipients} for:item="r">
+                    <li key={r.email}>{r.contactName} ({r.email})</li>
+                </template>
+            </ul>
+            <p class="slds-text-color_weak slds-m-top_small">
+                Each owner sees the amounts for both units. After sending, the bill is locked.
+            </p>
+        </template>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Cancel" onclick={handleCancel} disabled={sending}></lightning-button>
+        <lightning-button
+            class="slds-m-left_x-small"
+            variant="brand"
+            label={confirmLabel}
+            disabled={confirmDisabled}
+            onclick={handleConfirm}
+        ></lightning-button>
+    </lightning-modal-footer>
+</template>

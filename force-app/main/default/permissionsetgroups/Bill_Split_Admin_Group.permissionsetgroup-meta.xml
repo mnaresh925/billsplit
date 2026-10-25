@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Admins: everything staff can do plus delete and reopen sent bills.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Bill Split Admin Group</label>
+    <permissionSets>Bill_Split_Admin</permissionSets>
+    <permissionSets>Bill_Split_UI_Access</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

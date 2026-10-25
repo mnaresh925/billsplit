@@ -1,0 +1,167 @@
+<template>
+    <div class="slds-m-bottom_medium">
+        <!-- Back navigation -->
+        <lightning-button
+            variant="base"
+            label="Back to bills"
+            icon-name="utility:chevronleft"
+            onclick={handleBack}
+            class="slds-m-bottom_x-small"></lightning-button>
+
+        <h2 class="slds-text-heading_medium slds-m-bottom_xx-small">
+            {bill.utilityType} bill {bill.billNumber}
+        </h2>
+        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_medium">
+            {bill.propertyName}, billing period
+            <span class="slds-m-horizontal_xx-small">
+                <lightning-formatted-date-time
+                    value={bill.periodStart}
+                    year="numeric" month="short" day="2-digit"
+                    time-zone="UTC"></lightning-formatted-date-time>
+            </span>
+            to
+            <span class="slds-m-left_xx-small">
+                <lightning-formatted-date-time
+                    value={bill.periodEnd}
+                    year="numeric" month="short" day="2-digit"
+                    time-zone="UTC"></lightning-formatted-date-time>
+            </span>
+        </p>
+
+        <!-- Summary metrics card -->
+        <article class="slds-card slds-m-bottom_medium">
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_small">
+                        <p class="slds-text-title slds-m-bottom_xxx-small">Bill total</p>
+                        <p class="slds-text-heading_small">
+                            <lightning-formatted-number
+                                value={bill.totalAmount}
+                                format-style="currency"
+                                currency-code="AUD"></lightning-formatted-number>
+                        </p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_small">
+                        <p class="slds-text-title slds-m-bottom_xxx-small">Total usage</p>
+                        <p class="slds-text-heading_small">
+                            <lightning-formatted-number
+                                value={bill.totalUnits}
+                                maximum-fraction-digits="3"></lightning-formatted-number>
+                            {bill.unitOfMeasure}
+                        </p>
+                    </div>
+                    <template lwc:if={hasSupply}>
+                        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_small">
+                            <p class="slds-text-title slds-m-bottom_xxx-small">Supply charge (shared)</p>
+                            <p class="slds-text-heading_small">
+                                <lightning-formatted-number
+                                    value={bill.supplyCharge}
+                                    format-style="currency"
+                                    currency-code="AUD"></lightning-formatted-number>
+                            </p>
+                        </div>
+                    </template>
+                    <template lwc:if={hasMyShare}>
+                        <div class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4 slds-m-bottom_small">
+                            <p class="slds-text-title slds-m-bottom_xxx-small">Your share</p>
+                            <p class="slds-text-heading_small share-accent">
+                                <lightning-formatted-number
+                                    value={bill.myShare}
+                                    format-style="currency"
+                                    currency-code="AUD"></lightning-formatted-number>
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </article>
+
+        <!-- Allocation table -->
+        <div class="slds-scrollable_x">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table_fixed-layout">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col" class="slds-cell-wrap">
+                            <div class="slds-truncate" title="Unit">Unit</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate" title="Used">Used ({bill.unitOfMeasure})</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate" title="Share of usage">Share of usage</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate" title="Usage charge">Usage charge</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate" title="Supply charge">Supply charge</div>
+                        </th>
+                        <th scope="col" class="slds-text-align_right">
+                            <div class="slds-truncate" title="Amount payable">Amount payable</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={allocationRows} for:item="a">
+                        <tr key={a.unitId} class={a.rowClass}>
+                            <th scope="row" data-label="Unit">
+                                <div class="slds-truncate">
+                                    {a.unitName}
+                                    <template lwc:if={a.hasTag}>
+                                        <lightning-badge
+                                            label={a.tag}
+                                            class="slds-m-horizontal_xx-small"></lightning-badge>
+                                    </template>
+                                    <template lwc:if={a.isMine}>
+                                        <lightning-badge
+                                            label="Yours"
+                                            class="slds-m-horizontal_xx-small badge-mine"></lightning-badge>
+                                    </template>
+                                </div>
+                                <template lwc:if={a.hasReadings}>
+                                    <p class="slds-text-body_small slds-text-color_weak slds-m-top_xxx-small">
+                                        Meter {a.openingReading} → {a.closingReading}
+                                    </p>
+                                </template>
+                            </th>
+                            <td data-label="Used" class="slds-text-align_right">
+                                <lightning-formatted-number
+                                    value={a.unitsConsumed}
+                                    maximum-fraction-digits="3"></lightning-formatted-number>
+                            </td>
+                            <td data-label="Share of usage" class="slds-text-align_right">
+                                <lightning-formatted-number
+                                    value={a.sharePercent}
+                                    maximum-fraction-digits="1"></lightning-formatted-number>%
+                            </td>
+                            <td data-label="Usage charge" class="slds-text-align_right">
+                                <lightning-formatted-number
+                                    value={a.usageAmount}
+                                    format-style="currency"
+                                    currency-code="AUD"></lightning-formatted-number>
+                            </td>
+                            <td data-label="Supply charge" class="slds-text-align_right">
+                                <lightning-formatted-number
+                                    value={a.supplyAmount}
+                                    format-style="currency"
+                                    currency-code="AUD"></lightning-formatted-number>
+                            </td>
+                            <td data-label="Amount payable" class="slds-text-align_right">
+                                <strong>
+                                    <lightning-formatted-number
+                                        value={a.totalAmount}
+                                        format-style="currency"
+                                        currency-code="AUD"></lightning-formatted-number>
+                                </strong>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+
+        <template lwc:if={hasNotes}>
+            <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">{bill.notes}</p>
+        </template>
+    </div>
+</template>

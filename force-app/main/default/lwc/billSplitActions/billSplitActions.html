@@ -1,0 +1,23 @@
+<template>
+    <div class="slds-m-bottom_medium action-bar">
+        <lightning-button
+            variant="brand"
+            label={calculateLabel}
+            disabled={calculateDisabled}
+            onclick={handleCalculate}
+        ></lightning-button>
+        <template lwc:if={canSend}>
+            <lightning-button
+                variant="success"
+                label="Send to owners"
+                disabled={busy}
+                onclick={handleSend}
+            ></lightning-button>
+        </template>
+        <template lwc:if={busy}>
+            <div class="slds-is-relative spinner-inline">
+                <lightning-spinner alternative-text="Working" size="small"></lightning-spinner>
+            </div>
+        </template>
+    </div>
+</template>

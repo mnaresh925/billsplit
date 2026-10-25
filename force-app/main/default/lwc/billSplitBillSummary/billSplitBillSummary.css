@@ -1,0 +1,9 @@
+.metric {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.metric-label {
+    margin-bottom: 0.125rem;
+    color: var(--lwc-colorTextLabel, #706e6b);
+}

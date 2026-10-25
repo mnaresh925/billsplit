@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <description>An ABN has 11 digits.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(ABN__c)), NOT(REGEX(ABN__c, "[0-9]{11}")))</errorConditionFormula>
+    <errorDisplayField>ABN__c</errorDisplayField>
+    <errorMessage>Enter an 11 digit ABN.</errorMessage>
+    <fullName>ABN_Must_Be_11_Digits</fullName>
+</ValidationRule>

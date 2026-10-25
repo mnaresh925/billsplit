@@ -1,0 +1,12 @@
+.mine-row {
+    background-color: var(--lwc-colorBackgroundHighlight, #eef4ff);
+}
+
+.share-accent {
+    color: var(--lwc-colorBrand, #0176d3);
+}
+
+.badge-mine {
+    --sds-c-badge-color-background: var(--lwc-colorBrand, #0176d3);
+    --sds-c-badge-text-color: #ffffff;
+}

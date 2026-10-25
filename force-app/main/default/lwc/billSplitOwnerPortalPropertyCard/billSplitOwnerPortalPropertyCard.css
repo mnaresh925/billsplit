@@ -1,0 +1,17 @@
+.unit-mine {
+    border-left: 3px solid var(--lwc-colorBrand, #0176d3);
+    background-color: var(--lwc-colorBackgroundHighlight, #eef4ff);
+}
+
+.unit-default {
+    border-left: 3px solid var(--lwc-borderGray2, #eef1ef);
+}
+
+.share-accent {
+    color: var(--lwc-colorBrand, #0176d3);
+}
+
+.badge-mine {
+    --sds-c-badge-color-background: var(--lwc-colorBrand, #0176d3);
+    --sds-c-badge-text-color: #ffffff;
+}

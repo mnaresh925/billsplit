@@ -1,0 +1,548 @@
+<template>
+    <lightning-card title="New dual occupancy property" icon-name="standard:household">
+        <div class="slds-p-horizontal_medium">
+            <!-- Progress indicator – base (dot) type for wizard flows -->
+            <lightning-progress-indicator current-step={currentStep} type="base" variant="base">
+                <template for:each={steps} for:item="s">
+                    <lightning-progress-step key={s.value} label={s.label} value={s.value}></lightning-progress-step>
+                </template>
+            </lightning-progress-indicator>
+            <p class="slds-text-align_center slds-text-color_weak slds-m-top_x-small">
+                Step {currentStep} of 5
+            </p>
+
+            <!-- Error banner – ARIA live region for screen readers -->
+            <template lwc:if={hasError}>
+                <div class="slds-notify slds-notify_alert slds-alert_error slds-m-top_medium"
+                     role="alert" aria-live="assertive">
+                    <span class="slds-assistive-text">Error</span>
+                    <h2>{error}</h2>
+                </div>
+            </template>
+
+            <!-- ============================================================ -->
+            <!--  STEP CONTENT                                                -->
+            <!-- ============================================================ -->
+            <div class="slds-m-top_medium slds-p-bottom_medium step-content">
+
+                <!-- ====================================================== -->
+                <!-- Step 1: Property                                       -->
+                <!-- ====================================================== -->
+                <template lwc:if={isStep1}>
+                    <c-bill-split-step-header
+                        icon-name="standard:address"
+                        title="Property details"
+                        description="Enter the main address and council information for this dual-occupancy property."
+                        step-number="1"
+                        total-steps="5">
+                    </c-bill-split-step-header>
+
+                    <!-- Hero field – full width for prominence -->
+                    <div class="slds-m-bottom_medium">
+                        <lightning-input
+                            class="req"
+                            label="Property name"
+                            data-field="displayName"
+                            value={property.displayName}
+                            placeholder="For example 12 Banksia St"
+                            required
+                            onchange={handlePropertyField}>
+                        </lightning-input>
+                    </div>
+
+                    <!-- Council info – secondary fields with help text -->
+                    <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input
+                                label="Council"
+                                data-field="councilName"
+                                value={property.councilName}
+                                field-level-help="The local council or municipality this property belongs to."
+                                onchange={handlePropertyField}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                            <lightning-input
+                                label="Rates assessment number"
+                                data-field="ratesAssessmentNo"
+                                value={property.ratesAssessmentNo}
+                                field-level-help="Found on your council rates notice, usually a numeric reference."
+                                onchange={handlePropertyField}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <c-bill-split-address-picker
+                        label="Property address"
+                        value={property.address}
+                        onaddresschange={handlePropertyAddress}>
+                    </c-bill-split-address-picker>
+                </template>
+
+                <!-- ====================================================== -->
+                <!-- Step 2: Units                                          -->
+                <!-- ====================================================== -->
+                <template lwc:if={isStep2}>
+                    <c-bill-split-step-header
+                        icon-name="standard:home"
+                        title="The two units"
+                        description="Define each unit in this dual-occupancy property."
+                        step-number="2"
+                        total-steps="5">
+                    </c-bill-split-step-header>
+
+                    <template for:each={unitRows} for:item="u">
+                        <div key={u.index} class={u.cardClass}>
+                            <!-- Unit badge header -->
+                            <div class="slds-m-bottom_small">
+                                <span class={u.badgeClass}>Unit {u.number}</span>
+                            </div>
+
+                            <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_small">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <lightning-input
+                                        class="req"
+                                        label="Unit label"
+                                        data-index={u.index}
+                                        data-field="label"
+                                        value={u.label}
+                                        required
+                                        onchange={handleUnitField}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                    <lightning-combobox
+                                        label="Status"
+                                        data-index={u.index}
+                                        data-field="status"
+                                        value={u.status}
+                                        options={statusOptions}
+                                        onchange={handleUnitField}>
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+
+                            <!-- Toggle placed BEFORE the address so the decision comes first -->
+                            <div class="slds-m-bottom_small">
+                                <lightning-input
+                                    type="toggle"
+                                    label="Same address as the property"
+                                    data-index={u.index}
+                                    data-field="sameAsProperty"
+                                    checked={u.sameAsProperty}
+                                    message-toggle-active="Yes"
+                                    message-toggle-inactive="No"
+                                    onchange={handleUnitField}>
+                                </lightning-input>
+                            </div>
+
+                            <template lwc:if={u.showAddress}>
+                                <c-bill-split-address-picker
+                                    label={u.addressTitle}
+                                    data-index={u.index}
+                                    value={u.address}
+                                    onaddresschange={handleUnitAddress}>
+                                </c-bill-split-address-picker>
+                            </template>
+                        </div>
+                    </template>
+                </template>
+
+                <!-- ====================================================== -->
+                <!-- Step 3: Owners                                         -->
+                <!-- ====================================================== -->
+                <template lwc:if={isStep3}>
+                    <c-bill-split-step-header
+                        icon-name="standard:contact_list"
+                        title="Owners"
+                        description="Add property owners. Pick an existing contact or create a new one."
+                        step-number="3"
+                        total-steps="5">
+                    </c-bill-split-step-header>
+
+                    <template for:each={ownerRows} for:item="o">
+                        <fieldset key={o.key} class="slds-box slds-m-bottom_medium owner-card" aria-label={o.ariaLabel}>
+                            <legend class="slds-assistive-text">{o.ariaLabel}</legend>
+
+                            <!-- Card header: mode toggle + delete button -->
+                            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_small">
+                                <lightning-radio-group
+                                    label="Contact type"
+                                    variant="label-hidden"
+                                    type="button"
+                                    data-key={o.key}
+                                    options={modeOptions}
+                                    value={o.mode}
+                                    onchange={handleOwnerMode}>
+                                </lightning-radio-group>
+                                <template lwc:if={o.canRemove}>
+                                    <lightning-button-icon
+                                        icon-name="utility:delete"
+                                        variant="bare"
+                                        alternative-text={o.removeLabel}
+                                        data-key={o.key}
+                                        onclick={handleRemoveOwner}>
+                                    </lightning-button-icon>
+                                </template>
+                            </div>
+
+                            <!-- Identity banner – shown once name has been entered -->
+                            <template lwc:if={o.showIdentity}>
+                                <div class="slds-media slds-media_center slds-p-around_x-small owner-identity slds-m-bottom_small">
+                                    <div class="slds-media__figure">
+                                        <lightning-icon icon-name="standard:contact" size="small"></lightning-icon>
+                                    </div>
+                                    <div class="slds-media__body slds-m-left_small">
+                                        <p class="slds-text-body_regular slds-text-title_bold">{o.identityName}</p>
+                                        <template lwc:if={o.identityEmail}>
+                                            <p class="slds-text-body_small slds-text-color_weak">{o.identityEmail}</p>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Existing contact: record picker -->
+                            <template lwc:if={o.isExisting}>
+                                <lightning-record-picker
+                                    label="Contact"
+                                    object-api-name="Contact"
+                                    data-key={o.key}
+                                    display-info={pickerDisplay}
+                                    matching-info={pickerMatching}
+                                    placeholder="Search contacts..."
+                                    onchange={handleContactPick}>
+                                </lightning-record-picker>
+                            </template>
+
+                            <!-- New contact: name + email fields -->
+                            <template lwc:if={o.isNew}>
+                                <div class="slds-grid slds-wrap slds-gutters_small">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                        <lightning-input
+                                            label="First name"
+                                            data-key={o.key}
+                                            data-field="firstName"
+                                            value={o.firstName}
+                                            onchange={handleOwnerField}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                        <lightning-input
+                                            class="req"
+                                            label="Last name"
+                                            data-key={o.key}
+                                            data-field="lastName"
+                                            value={o.lastName}
+                                            required
+                                            onchange={handleOwnerField}>
+                                        </lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                                        <lightning-input
+                                            class="req"
+                                            type="email"
+                                            label="Email"
+                                            data-key={o.key}
+                                            data-field="email"
+                                            value={o.email}
+                                            required
+                                            onchange={handleOwnerField}>
+                                        </lightning-input>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <!-- Ownership & billing preferences -->
+                            <div class="slds-grid slds-wrap slds-gutters_small slds-m-top_small">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-combobox
+                                        label="Owns"
+                                        data-key={o.key}
+                                        data-field="unitChoice"
+                                        value={o.unitChoice}
+                                        options={o.unitOptions}
+                                        onchange={handleOwnerField}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-combobox
+                                        label="Role"
+                                        data-key={o.key}
+                                        data-field="role"
+                                        value={o.role}
+                                        options={roleOptions}
+                                        onchange={handleOwnerField}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-combobox
+                                        label="Send bills to"
+                                        data-key={o.key}
+                                        data-field="preference"
+                                        value={o.preference}
+                                        options={preferenceOptions}
+                                        field-level-help="Choose which email address should receive bill notifications."
+                                        onchange={handleOwnerField}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4 slds-align-bottom">
+                                    <lightning-input
+                                        type="toggle"
+                                        label="Receives bills"
+                                        data-key={o.key}
+                                        data-field="receivesBills"
+                                        checked={o.receivesBills}
+                                        message-toggle-active="Yes"
+                                        message-toggle-inactive="No"
+                                        onchange={handleOwnerField}>
+                                    </lightning-input>
+                                </div>
+                            </div>
+
+                            <!-- Alternate email – conditionally visible when preference requires it -->
+                            <template lwc:if={o.showAlternateEmail}>
+                                <div class="slds-grid slds-wrap slds-gutters_small slds-m-top_small">
+                                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                                        <lightning-input
+                                            class="req"
+                                            type="email"
+                                            label="Alternate billing email"
+                                            data-key={o.key}
+                                            data-field="alternateEmail"
+                                            value={o.alternateEmail}
+                                            required
+                                            field-level-help="Bills will be sent to this email instead of, or in addition to, the primary email."
+                                            onchange={handleOwnerField}>
+                                        </lightning-input>
+                                    </div>
+                                </div>
+                            </template>
+                        </fieldset>
+                    </template>
+
+                    <!-- Ghost card – visual "add" placeholder -->
+                    <div class="ghost-card" role="button" tabindex="0"
+                         onclick={handleAddOwner} onkeydown={handleGhostCardKey}>
+                        <lightning-icon icon-name="utility:add" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                        <span class="slds-text-body_regular">Add another owner</span>
+                    </div>
+                </template>
+
+                <!-- ====================================================== -->
+                <!-- Step 4: Utility / Water account                        -->
+                <!-- ====================================================== -->
+                <template lwc:if={isStep4}>
+                    <c-bill-split-step-header
+                        icon-name="standard:service_contract"
+                        title="Water account and sub-meter"
+                        description="Link the council water account and optionally configure a sub-meter for individual unit measurement."
+                        step-number="4"
+                        total-steps="5">
+                    </c-bill-split-step-header>
+
+                    <div class="slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <lightning-input
+                                class="req"
+                                label="Council account number"
+                                data-field="accountNumber"
+                                value={utility.accountNumber}
+                                required
+                                field-level-help="The water account number from your council bill."
+                                onchange={handleUtilityField}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <lightning-input
+                                label="Provider"
+                                data-field="provider"
+                                value={utility.provider}
+                                field-level-help="The water utility company, e.g. Sydney Water, Yarra Valley Water."
+                                onchange={handleUtilityField}>
+                            </lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                            <lightning-combobox
+                                label="Billing frequency"
+                                data-field="billingFrequency"
+                                value={utility.billingFrequency}
+                                options={frequencyOptions}
+                                onchange={handleUtilityField}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+
+                    <!-- Sub-meter toggle -->
+                    <div class="slds-m-bottom_small">
+                        <lightning-input
+                            type="toggle"
+                            label="One unit has its own water sub-meter"
+                            data-field="hasSubMeter"
+                            checked={utility.hasSubMeter}
+                            message-toggle-active="Yes"
+                            message-toggle-inactive="No"
+                            onchange={handleUtilityField}>
+                        </lightning-input>
+                    </div>
+
+                    <!-- Sub-meter detail section – shaded box for visual grouping -->
+                    <template lwc:if={showMeterFields}>
+                        <div class="slds-box slds-box_x-small slds-theme_shade meter-section">
+                            <p class="slds-text-title_bold slds-m-bottom_small">Sub-meter details</p>
+                            <div class="slds-grid slds-wrap slds-gutters_small">
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-input
+                                        class="req"
+                                        label="Sub-meter number"
+                                        data-field="meterName"
+                                        value={utility.meterName}
+                                        required
+                                        onchange={handleUtilityField}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-combobox
+                                        label="Serves"
+                                        data-field="meterUnit"
+                                        value={utility.meterUnit}
+                                        options={meterUnitOptions}
+                                        onchange={handleUtilityField}>
+                                    </lightning-combobox>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-input
+                                        class="req"
+                                        type="number"
+                                        step="any"
+                                        min="0"
+                                        label="Baseline reading (kL)"
+                                        data-field="baselineValue"
+                                        value={utility.baselineValue}
+                                        required
+                                        field-level-help="The sub-meter reading at the start of the first bill you will split."
+                                        onchange={handleUtilityField}>
+                                    </lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-4">
+                                    <lightning-input
+                                        class="req"
+                                        type="date"
+                                        label="Baseline reading date"
+                                        data-field="baselineDate"
+                                        value={utility.baselineDate}
+                                        required
+                                        field-level-help="The date the baseline reading was taken."
+                                        onchange={handleUtilityField}>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <!-- ====================================================== -->
+                <!-- Step 5: Review                                         -->
+                <!-- ====================================================== -->
+                <template lwc:if={isStep5}>
+                    <c-bill-split-step-header
+                        icon-name="standard:task2"
+                        title="Review and confirm"
+                        description="Check everything looks right before saving."
+                        step-number="5"
+                        total-steps="5">
+                    </c-bill-split-step-header>
+
+                    <!-- Property -->
+                    <c-bill-split-summary-card
+                        icon-name="standard:household"
+                        title="Property"
+                        step-number="1"
+                        onedit={handleReviewEdit}>
+                        <p class="slds-text-body_regular">{property.displayName}</p>
+                        <p class="slds-text-body_small slds-text-color_weak">{reviewPropertyAddress}</p>
+                        <template lwc:if={property.councilName}>
+                            <p class="slds-text-body_small slds-m-top_xx-small">
+                                Council: {property.councilName}
+                            </p>
+                        </template>
+                    </c-bill-split-summary-card>
+
+                    <!-- Units -->
+                    <c-bill-split-summary-card
+                        icon-name="standard:home"
+                        title="Units"
+                        step-number="2"
+                        onedit={handleReviewEdit}>
+                        <template for:each={reviewUnits} for:item="r">
+                            <div key={r.key} class="slds-m-bottom_xx-small">
+                                <p class="slds-text-body_regular">
+                                    <strong>{r.label}</strong> — {r.status}
+                                </p>
+                                <p class="slds-text-body_small slds-text-color_weak">{r.address}</p>
+                            </div>
+                        </template>
+                    </c-bill-split-summary-card>
+
+                    <!-- Owners -->
+                    <c-bill-split-summary-card
+                        icon-name="standard:contact_list"
+                        title="Owners"
+                        step-number="3"
+                        onedit={handleReviewEdit}>
+                        <template for:each={reviewOwners} for:item="r">
+                            <div key={r.key} class="slds-m-bottom_xx-small">
+                                <p class="slds-text-body_regular">
+                                    <strong>{r.name}</strong> — {r.role}
+                                </p>
+                                <p class="slds-text-body_small slds-text-color_weak">{r.detail}</p>
+                            </div>
+                        </template>
+                    </c-bill-split-summary-card>
+
+                    <!-- Water account -->
+                    <c-bill-split-summary-card
+                        icon-name="standard:service_contract"
+                        title="Water account"
+                        step-number="4"
+                        onedit={handleReviewEdit}>
+                        <template for:each={reviewUtility} for:item="r">
+                            <p key={r.key} class="slds-text-body_regular slds-m-bottom_xx-small">{r.text}</p>
+                        </template>
+                    </c-bill-split-summary-card>
+                </template>
+
+            </div>
+        </div>
+
+        <!-- ============================================================== -->
+        <!--  Sticky footer – inside card body, not in the slot             -->
+        <!-- ============================================================== -->
+        <div class="footer-bar">
+            <div class="slds-grid slds-grid_align-spread slds-p-horizontal_medium">
+                <lightning-button label="Cancel" variant="neutral" onclick={handleCancel}></lightning-button>
+                <div>
+                    <template lwc:if={hasBack}>
+                        <lightning-button label="Back" onclick={handleBack} disabled={saving}></lightning-button>
+                    </template>
+                    <template lwc:if={hasNext}>
+                        <lightning-button
+                            class="slds-m-left_x-small"
+                            label="Next"
+                            variant="brand"
+                            onclick={handleNext}>
+                        </lightning-button>
+                    </template>
+                    <template lwc:if={isStep5}>
+                        <lightning-button
+                            class="slds-m-left_x-small"
+                            label={saveLabel}
+                            variant="brand"
+                            disabled={saving}
+                            onclick={handleSave}>
+                        </lightning-button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

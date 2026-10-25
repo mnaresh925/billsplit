@@ -1,0 +1,20 @@
+<template>
+    <div class="slds-media slds-m-bottom_medium">
+        <div class="slds-media__figure">
+            <lightning-icon icon-name={iconName} size="medium"></lightning-icon>
+        </div>
+        <div class="slds-media__body">
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center">
+                <h3 class="slds-text-heading_small">{title}</h3>
+                <template lwc:if={showStepCount}>
+                    <span class="slds-badge slds-badge_lightest step-badge">
+                        Step {stepNumber} of {totalSteps}
+                    </span>
+                </template>
+            </div>
+            <template lwc:if={description}>
+                <p class="slds-text-body_regular slds-text-color_weak slds-m-top_xx-small">{description}</p>
+            </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Gives portal access to Owners</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Bill_Split_Owner_Portal_Group</label>
+    <permissionSets>Bill_Split_Portal_Access</permissionSets>
+    <permissionSets>Bill_Split_Portal_Owner</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

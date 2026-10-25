@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>BillSplitController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>PropertySetupController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <description>Lets staff use the Bill Split workbench and property setup wizard (Apex controllers and the Property Setup tab). Assign together with Bill_Split_Staff or Bill_Split_Admin.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Bill Split UI Access</label>
+    <tabSettings>
+        <tab>Property_Setup</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+</PermissionSet>

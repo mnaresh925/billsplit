@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Supply_Charge_Within_Total</fullName>
+    <active>true</active>
+    <description>Supply charge is from zero up to the bill total.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(Supply_Charge__c)), OR(Supply_Charge__c &lt; 0, Supply_Charge__c &gt; Total_Amount__c))</errorConditionFormula>
+    <errorDisplayField>Supply_Charge__c</errorDisplayField>
+    <errorMessage>Supply Charge must be between 0 and the Total Amount.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,1 @@
+public class BillSplitException extends Exception {}

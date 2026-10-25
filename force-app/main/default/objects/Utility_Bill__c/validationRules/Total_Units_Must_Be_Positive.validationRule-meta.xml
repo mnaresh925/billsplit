@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_Units_Must_Be_Positive</fullName>
+    <active>true</active>
+    <description>Bill total units must be greater than zero.</description>
+    <errorConditionFormula>AND(NOT(ISBLANK(Total_Units_Consumed__c)), Total_Units_Consumed__c &lt;= 0)</errorConditionFormula>
+    <errorDisplayField>Total_Units_Consumed__c</errorDisplayField>
+    <errorMessage>Total Units Consumed must be greater than zero.</errorMessage>
+</ValidationRule>

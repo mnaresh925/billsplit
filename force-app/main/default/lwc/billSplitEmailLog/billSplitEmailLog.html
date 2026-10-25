@@ -1,0 +1,45 @@
+<template>
+    <div class="email-log-section">
+        <h3 class="slds-text-heading_small slds-m-top_large slds-m-bottom_small">Emails</h3>
+        <div class="slds-scrollable_x">
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">Owner</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Sent</th>
+                        <th scope="col">Detail</th>
+                        <th scope="col"><span class="slds-assistive-text">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={rows} for:item="n">
+                        <tr key={n.notificationId}>
+                            <th scope="row">{n.contactName}</th>
+                            <td>{n.email}</td>
+                            <td><span class={n.badgeClass}>{n.status}</span></td>
+                            <td>
+                                <template lwc:if={n.sentAt}>
+                                    <lightning-formatted-date-time value={n.sentAt} year="numeric" month="short" day="2-digit" hour="2-digit" minute="2-digit"></lightning-formatted-date-time>
+                                </template>
+                            </td>
+                            <td>{n.message}</td>
+                            <td>
+                                <template lwc:if={n.canResend}>
+                                    <lightning-button
+                                        variant="base"
+                                        label="Resend"
+                                        data-id={n.notificationId}
+                                        disabled={busy}
+                                        onclick={handleResend}
+                                    ></lightning-button>
+                                </template>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
