@@ -37,50 +37,7 @@ Dual-occupancy and subdivided duplex residential properties frequently receive a
 
 ## 3. Solution Architecture & Component Interactions
 
-```mermaid
-flowchart TD
-    subgraph UI_Layer["User Interface Layer (LWC & App)"]
-        A[Property Setup Wizard<br/>billSplitPropertySetup]
-        B[Leaflet Map Picker<br/>billSplitAddressPicker]
-        C[Staff Utility Bill Workbench<br/>billSplitWorkbench]
-        D[Experience Cloud Owner Portal<br/>billSplitOwnerPortal]
-    end
-
-    subgraph Controller_Layer["Apex Controllers & Services"]
-        E[PropertySetupController]
-        F[BillSplitController]
-        G[OwnerPortalController]
-        H[BillSplitService]
-        I[BillSplitCalculator<br/>(Pure Engine)]
-        J[BillSplitNotificationService]
-        K[BillSplitEmailBuilder]
-        L[OwnershipSharingService]
-    end
-
-    subgraph Data_Layer["Data & Security Layer"]
-        M[(Property__c & Unit__c)]
-        N[(Utility_Account__c & Meter__c)]
-        O[(Meter_Reading__c)]
-        P[(Utility_Bill__c)]
-        Q[(Bill_Allocation__c)]
-        R[(Bill_Notification__c)]
-        S[(Property__Share<br/>RowCause: Owner_Access__c)]
-    end
-
-    A --> B
-    A --> E
-    E --> M & N & O
-    C --> F
-    F --> H
-    H --> I
-    H --> Q & P
-    F --> J
-    J --> K
-    J --> R & P
-    D --> G
-    G --> M & P & Q
-    L --> S
-```
+![alt text](image.png)
 
 ### Component Breakdown
 | Class / Component | Type | Responsibility |
