@@ -1,0 +1,72 @@
+# Salesforce DX CLI & Cache
+.sf/
+.sfdx/
+.localdevserver/
+deploy-options.json
+tmp/
+tmp-*
+tmp-*.log
+
+# LWC VSCode autocomplete & Jest
+**/lwc/jsconfig.json
+coverage/
+
+# Build & Dependency Directories
+node_modules/
+
+# Linter & PMD Caches
+.pmdCache
+.eslintcache
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & Secret Variables
+.env
+.env.*
+*.env
+*.secret
+
+# Private Keys, Certificates, and Tokens
+*.key
+*.pem
+*.p12
+*.crt
+*.cert
+jwt/
+server.key
+server.crt
+
+# AI Agent & Assistant Local Configuration (contains local API tokens)
+.claude/
+*.local.json
+
+# Scratch notes and sensitive local scratch files
+new 39.txt
+scratch/
+*.tmp
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# IDE & Editor Specific
+.idea/
+*.swp
+*.swo
+*~
+
+# Python Salesforce Functions (if used)
+**/__pycache__/
+**/.venv/
+**/venv/
+
+# Explicit Whitelist: ensure required project text files are always tracked
+!scripts/promote/test-classes.txt
